@@ -7,11 +7,11 @@ const endGame = success => {
 	buttons.forEach(button => button.classList.add('hidden'));
 	if (success) {
 		document.querySelector('.success-msg').classList.add('visible');
-		const wins = window.localStorage.getItem('wins') ?? 0;
+		const wins = Number(window.localStorage.getItem('wins') ?? 0);
 		window.localStorage.setItem('wins', wins + 1);
 	} else {
 		document.querySelector('.fail-msg').classList.add('visible');
-		const losses = window.localStorage.getItem('losses') ?? 0;
+		const losses = Number(window.localStorage.getItem('losses') ?? 0);
 		window.localStorage.setItem('losses', losses + 1);
 	}
 };

@@ -42,13 +42,12 @@ const handleGetRandomWord = async () => {
 app.get('/', async (req, res) => {
 	await handleGetRandomWord();
 	const { etymology } = random;
-	if (String(etymology).toLowerCase().includes('latin')) {
-		random.latin = true;
-	}
-	if (String(etymology).toLowerCase().includes('germanic')) {
-		random.germanic = true;
-	}
-	res.render('home', random);
+
+	random.latin = String(etymology).toLowerCase().includes('latin');
+
+	random.germanic = String(etymology).toLowerCase().includes('germanic');
+
+	res.render('home', { ...random });
 });
 
 app.listen(port, () => {
