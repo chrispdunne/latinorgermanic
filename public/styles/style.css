@@ -1,0 +1,9 @@
+.etymology,
+.hidden,
+.end-msg {
+	display: none;
+}
+.etymology.visible,
+.end-msg.visible {
+	display: block;
+}

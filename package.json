@@ -1,0 +1,19 @@
+{
+  "name": "latin-or-germanic",
+  "version": "1.0.0",
+  "description": "Fun game, guess if English words are latin or germanic derived",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "jsdom": "^20.0.0",
+    "node-fetch": "^3.2.9"
+  }
+}

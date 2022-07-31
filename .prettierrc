@@ -1,0 +1,24 @@
+{
+	"useTabs": true,
+	"tabWidth": 4,
+	"trailingComma": "none",
+	"singleQuote": true,
+	"semi": true,
+	"arrowParens": "avoid",
+	"printWidth": 80,
+	"importOrder": [
+		"<THIRD_PARTY_MODULES>",
+		"^assets/(.*)$",
+		"^components/(.*)$",
+		"^const/(.*)$",
+		"^containers/(.*)$",
+		"^hooks/(.*)$",
+		"^store/(.*)$",
+		"^styles/(.*)$",
+		"^types/(.*)$",
+		"^utils/(.*)$",
+		"^[./]"
+	],
+	"importOrderSeparation": false,
+	"importOrderSortSpecifiers": true
+}
