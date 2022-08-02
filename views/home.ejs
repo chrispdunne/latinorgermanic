@@ -6,20 +6,21 @@
 	<body>
 		<h1>Latin Or Germanic?</h1>
 
-		<h2><% if (word) { %> <%= word %> <% } %></h2>
+		<h2 class="word"><% if (word) { %> <%= word %> <% } %></h2>
 
-		<button id="latin" <% if (latin) { %>
-			data-language="latin" <% } %> >LATIN
+		<button class="guess" id="latin">LATIN
 		</button>
 
-		<button id="germanic" <% if (germanic) { %>
-			data-language="germanic" <% } %> >GERMANIC
+		<button class="guess" id="germanic">GERMANIC
 		</button>
 
 		<h3 class="end-msg success-msg">Success!</h3>
 		<h3 class="end-msg fail-msg">WRONG!</h3>
 
 		<% if (etymology) { %> <p class="etymology"><%= etymology %></p> <% } %></p>
+
+		<button id="new_game">New game</button>
+
 		<script type="text/javascript" src="scripts/main.js"></script>
 	</body>
 </html>

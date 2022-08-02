@@ -1,39 +1,67 @@
 console.log('loaded');
-const buttons = document.querySelectorAll('button');
+const guessButtons = document.querySelectorAll('button.guess');
+const newButton = document.querySelector('#new_game');
+const wordTitle = document.querySelector('.word');
+const ety = document.querySelector('.etymology');
+const successMsg = document.querySelector('.success-msg');
+const failMsg = document.querySelector('.fail-msg');
+
+let guessCount = 0;
+
+const resetGame = () => {
+	ety.classList.remove('visible');
+	guessButtons.forEach(button => button.classList.remove('hidden'));
+	successMsg.classList.remove('visible');
+	failMsg.classList.remove('visible');
+};
+
+const newGame = async () => {
+	guessCount++;
+	resetGame();
+	const res = await fetch(`/`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ newGame: true, guessCount })
+	});
+	const { word } = await res.json();
+	if (word?.word) {
+		wordTitle.innerHTML = word.word;
+	}
+	if (word?.etymology) {
+		ety.innerHTML = word.etymology;
+	}
+	console.log({ word });
+};
 
 const endGame = success => {
-	const ety = document.querySelector('.etymology');
 	ety.classList.add('visible');
-	buttons.forEach(button => button.classList.add('hidden'));
+	guessButtons.forEach(button => button.classList.add('hidden'));
 	if (success) {
-		document.querySelector('.success-msg').classList.add('visible');
+		successMsg.classList.add('visible');
 		const wins = Number(window.localStorage.getItem('wins') ?? 0);
 		window.localStorage.setItem('wins', wins + 1);
 	} else {
-		document.querySelector('.fail-msg').classList.add('visible');
+		failMsg.classList.add('visible');
 		const losses = Number(window.localStorage.getItem('losses') ?? 0);
 		window.localStorage.setItem('losses', losses + 1);
 	}
 };
 
-const handleClick = async e => {
+const guess = async e => {
 	const guess = e.target.id;
-
-	if (e.target.dataset.language === guess) {
-		console.log(guess, 'correct');
+	const res = await fetch(`/`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ guess, guessCount })
+	});
+	const answer = await res.json();
+	console.log({ answer });
+	if (answer.correct) {
 		endGame(true);
 	} else {
-		console.log(guess, 'wrong');
 		endGame();
 	}
-
-	// const res = await fetch(`/`, {
-	// 	method: 'POST',
-	// 	headers: { 'Content-Type': 'application/json' },
-	// 	body: JSON.stringify({ guess })
-	// });
-	// const answer = await res.json();
-	// console.log({ answer });
 };
 
-buttons.forEach(button => button.addEventListener('click', handleClick));
+guessButtons.forEach(button => button.addEventListener('click', guess));
+newButton.addEventListener('click', newGame);

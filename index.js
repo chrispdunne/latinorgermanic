@@ -84,9 +84,23 @@ app.listen(port, () => {
 
 // POST method route
 app.post('/', (req, res) => {
+	const words = JSON.parse(db.get('words'));
 	console.log(req.body);
 
-	res.json({ requestBody: req.body });
+	// answer a guess
+	if (req.body.guess) {
+		const correct = words[req.body.guessCount][req.body.guess];
+		console.log(correct);
+		res.json({ correct });
+	}
+	// send new word
+	if (req.body.newGame) {
+		const word = words[req.body.guessCount];
+
+		res.json({ word });
+	}
+
+	// res.json({ requestBody: req.body });
 
 	// res.send('POST request to the homepage');
 });
