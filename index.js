@@ -1,6 +1,9 @@
 import fetch from 'node-fetch';
 import jsdom from 'jsdom';
 import express from 'express';
+import JSONdb from 'simple-json-db';
+
+const db = new JSONdb('db.json');
 
 const port = process.env.PORT || 3113;
 
@@ -12,8 +15,6 @@ app.use(express.static('public'));
 app.use(express.json());
 
 const { JSDOM } = jsdom;
-
-let random = {};
 
 const getRandomWord = async () => {
 	const randomWord = await fetch(
@@ -30,24 +31,51 @@ const getRandomWord = async () => {
 		'[class^="word__defination"]'
 	)?.textContent;
 
-	return { word, etymology };
+	const latin = String(etymology).toLowerCase().includes('latin');
+	const germanic = String(etymology).toLowerCase().includes('germanic');
+
+	return { word, etymology, latin, germanic };
 };
 const handleGetRandomWord = async () => {
+	let random;
+	// @TODO consider not returning words without latin or germanic keywords
 	do {
 		random = await getRandomWord();
-	} while (!random.etymology);
+	} while (!random.etymology || (!random.latin && !random.germanic));
 	return random;
 };
 
+const get10RandomWords = async () => {
+	let words = [];
+
+	// check cache expiry
+	const expiry = db.get('expiry');
+	if (expiry && Number(expiry) > Date.now()) {
+		console.log('expiry:', expiry);
+		// non-expired
+		const _words = db.get('words');
+		words = JSON.parse(_words);
+		if (words && Array.isArray(words) && words.length > 0) {
+			return words;
+		}
+	}
+
+	// otherwise reset expiry, get new words and save to db
+
+	for (let i = 0; i < 10; i++) {
+		const word = await handleGetRandomWord();
+		words.push(word);
+	}
+	db.set('words', JSON.stringify(words));
+	db.set('expiry', Date.now() + 1000 * 60 * 60); // 1 hour
+	return words;
+};
+
 app.get('/', async (req, res) => {
-	await handleGetRandomWord();
-	const { etymology } = random;
+	const words = await get10RandomWords();
+	const word = words[0];
 
-	random.latin = String(etymology).toLowerCase().includes('latin');
-
-	random.germanic = String(etymology).toLowerCase().includes('germanic');
-
-	res.render('home', { ...random });
+	res.render('home', { ...word });
 });
 
 app.listen(port, () => {
