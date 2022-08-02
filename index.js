@@ -67,7 +67,7 @@ const get10RandomWords = async () => {
 		words.push(word);
 	}
 	db.set('words', JSON.stringify(words));
-	db.set('expiry', Date.now() + 1000 * 60 * 60); // 1 hour
+	db.set('expiry', Date.now() + 1000 * 60 * 60 * 24); // 24 hours
 	return words;
 };
 
