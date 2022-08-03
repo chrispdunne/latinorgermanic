@@ -3,7 +3,7 @@ import jsdom from 'jsdom';
 import express from 'express';
 import JSONdb from 'simple-json-db';
 
-const db = new JSONdb('db.json');
+const db = new JSONdb('../db.json');
 
 const port = process.env.PORT || 3113;
 
