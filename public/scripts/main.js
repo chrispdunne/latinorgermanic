@@ -9,16 +9,23 @@ const progressChips = document.querySelectorAll('.chip');
 const scoreCount = document.querySelector('.score .count');
 
 let guessCount = 0;
+let guesses = [];
+
+let gameEnded = false;
 
 const resetGame = () => {
+	newButton.classList.remove('visible');
 	ety.classList.remove('visible');
-	guessButtons.forEach(button => button.classList.remove('hidden'));
+	guessButtons.forEach(button => button.classList.remove('end'));
+	guessButtons.forEach(button => button.classList.remove('correct'));
+	guessButtons.forEach(button => button.classList.remove('wrong'));
 	progressChips.forEach(button => button.classList.remove('current'));
 	successMsg.classList.remove('visible');
 	failMsg.classList.remove('visible');
 };
 
 const newGame = async () => {
+	gameEnded = false;
 	guessCount++;
 	resetGame();
 	progressChips[guessCount].classList.add('current');
@@ -38,21 +45,37 @@ const newGame = async () => {
 	console.log({ word });
 };
 
-const endGame = success => {
+const endGame = (guess, success) => {
+	gameEnded = true;
 	ety.classList.add('visible');
-	guessButtons.forEach(button => button.classList.add('hidden'));
+	guessButtons.forEach(button => button.classList.add('end'));
 	if (success) {
+		document.querySelector('.guess#' + guess).classList.add('correct');
+
+		guesses[guessCount] = true;
 		successMsg.classList.add('visible');
 		const wins = Number(window.localStorage.getItem('wins') ?? 0);
 		window.localStorage.setItem('wins', wins + 1);
+		progressChips[guessCount].classList.add('correct');
+		scoreCount.innerHTML = guesses.filter(guess => guess).length;
 	} else {
+		document.querySelector('.guess#' + guess).classList.add('wrong');
+
+		guesses[guessCount] = false;
 		failMsg.classList.add('visible');
 		const losses = Number(window.localStorage.getItem('losses') ?? 0);
 		window.localStorage.setItem('losses', losses + 1);
+		progressChips[guessCount].classList.add('wrong');
+	}
+
+	if (guessCount < 9) {
+		newButton.classList.add('visible');
+	} else {
 	}
 };
 
 const guess = async e => {
+	if (gameEnded) return;
 	const guess = e.target.id;
 	const res = await fetch(`/`, {
 		method: 'POST',
@@ -62,9 +85,9 @@ const guess = async e => {
 	const answer = await res.json();
 	console.log({ answer });
 	if (answer.correct) {
-		endGame(true);
+		endGame(answer.guess, true);
 	} else {
-		endGame();
+		endGame(answer.guess);
 	}
 };
 

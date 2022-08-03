@@ -1,3 +1,8 @@
+:root {
+	--green: #0bb77d;
+	--red: #b70b45;
+	--grey: #dddddd;
+}
 @font-face {
 	font-family: lilita;
 	src: url(../fonts/lilita.woff);
@@ -12,13 +17,13 @@ main {
 	align-items: center;
 }
 header {
-	background: #0bb77d;
+	background: var(--green);
 	width: 100%;
 	text-align: center;
 }
 .word {
 	font-size: 48px;
-	color: #0bb77d;
+	color: var(--green);
 	text-transform: uppercase;
 	font-family: lilita;
 	font-weight: normal;
@@ -34,13 +39,24 @@ header {
 	width: 200px;
 	cursor: pointer;
 }
-.guess#latin {
+button#latin {
 	background: #000;
 	color: #fff;
 }
-.guess#germanic {
+button#germanic {
 	background: transparent;
 	border: 1px solid #000;
+}
+.guess.end {
+	background: var(--grey) !important;
+	border: 0 !important;
+	color: #fff;
+}
+.guess.end.correct {
+	background: var(--green) !important;
+}
+.guess.end.wrong {
+	background: var(--red) !important;
 }
 .progress-bar {
 	display: flex;
@@ -53,8 +69,7 @@ header {
 	background: #c0c6c4;
 	position: relative;
 }
-.progress-bar .chip.current {
-}
+
 .progress-bar .chip.current:after {
 	content: '';
 	position: absolute;
@@ -66,6 +81,18 @@ header {
 	right: 0;
 	top: -5px;
 	background: #fff;
+}
+.progress-bar .chip.correct {
+	background: var(--green);
+}
+.progress-bar .chip.wrong {
+	background: var(--red);
+}
+.progress-bar .chip.correct.current:after {
+	border-color: var(--green);
+}
+.progress-bar .chip.wrong.current:after {
+	border-color: var(--red);
 }
 .score {
 	text-align: center;
@@ -84,4 +111,11 @@ header {
 	margin: auto;
 	background: #f3f3f3;
 	padding: 50px 50px 55px;
+}
+
+#new_game {
+	display: none;
+}
+#new_game.visible {
+	display: block;
 }

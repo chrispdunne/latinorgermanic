@@ -51,7 +51,6 @@ const get10RandomWords = async () => {
 	// check cache expiry
 	const expiry = db.get('expiry');
 	if (expiry && Number(expiry) > Date.now()) {
-		console.log('expiry:', expiry);
 		// non-expired
 		const _words = db.get('words');
 		words = JSON.parse(_words);
@@ -85,13 +84,12 @@ app.listen(port, () => {
 // POST method route
 app.post('/', (req, res) => {
 	const words = JSON.parse(db.get('words'));
-	console.log(req.body);
 
 	// answer a guess
 	if (req.body.guess) {
 		const correct = words[req.body.guessCount][req.body.guess];
-		console.log(correct);
-		res.json({ correct });
+
+		res.json({ correct, guess: req.body.guess });
 	}
 	// send new word
 	if (req.body.newGame) {
@@ -99,8 +97,4 @@ app.post('/', (req, res) => {
 
 		res.json({ word });
 	}
-
-	// res.json({ requestBody: req.body });
-
-	// res.send('POST request to the homepage');
 });
