@@ -5,12 +5,15 @@ const wordTitle = document.querySelector('.word');
 const ety = document.querySelector('.etymology');
 const successMsg = document.querySelector('.success-msg');
 const failMsg = document.querySelector('.fail-msg');
+const progressChips = document.querySelectorAll('.chip');
+const scoreCount = document.querySelector('.score .count');
 
 let guessCount = 0;
 
 const resetGame = () => {
 	ety.classList.remove('visible');
 	guessButtons.forEach(button => button.classList.remove('hidden'));
+	progressChips.forEach(button => button.classList.remove('current'));
 	successMsg.classList.remove('visible');
 	failMsg.classList.remove('visible');
 };
@@ -18,6 +21,8 @@ const resetGame = () => {
 const newGame = async () => {
 	guessCount++;
 	resetGame();
+	progressChips[guessCount].classList.add('current');
+
 	const res = await fetch(`/`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },

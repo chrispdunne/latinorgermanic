@@ -1,3 +1,75 @@
+@font-face {
+	font-family: lilita;
+	src: url(../fonts/lilita.woff);
+}
+body {
+	margin: 0;
+	font-family: sans-serif;
+}
+main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+header {
+	background: #0bb77d;
+	width: 100%;
+	text-align: center;
+}
+.word {
+	font-size: 48px;
+	color: #0bb77d;
+	text-transform: uppercase;
+	font-family: lilita;
+	font-weight: normal;
+}
+.btns {
+	display: flex;
+	gap: 60px;
+}
+.guess {
+	padding: 20px 40px 20px;
+	font-size: 20px;
+	appearance: none;
+	width: 200px;
+	cursor: pointer;
+}
+.guess#latin {
+	background: #000;
+	color: #fff;
+}
+.guess#germanic {
+	background: transparent;
+	border: 1px solid #000;
+}
+.progress-bar {
+	display: flex;
+	gap: 2px;
+	padding: 50px 0;
+}
+.progress-bar .chip {
+	width: 27px;
+	height: 5px;
+	background: #c0c6c4;
+	position: relative;
+}
+.progress-bar .chip.current {
+}
+.progress-bar .chip.current:after {
+	content: '';
+	position: absolute;
+	display: block;
+	width: 8px;
+	height: 8px;
+	border: 4px solid #c0c6c4;
+	border-radius: 100%;
+	right: 0;
+	top: -5px;
+	background: #fff;
+}
+.score {
+	text-align: center;
+}
 .etymology,
 .hidden,
 .end-msg {
@@ -6,4 +78,10 @@
 .etymology.visible,
 .end-msg.visible {
 	display: block;
+}
+.etymology {
+	max-width: 600px;
+	margin: auto;
+	background: #f3f3f3;
+	padding: 50px 50px 55px;
 }

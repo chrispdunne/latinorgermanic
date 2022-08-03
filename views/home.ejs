@@ -4,23 +4,41 @@
 		<link rel="stylesheet" type="text/css" href="styles/style.css" />
 	</head>
 	<body>
-		<h1>Latin Or Germanic?</h1>
+		<main>
+			<header>
+				<h1><img src="images/logo.svg" alt="Latin Or Germanic?"/></h1>
+			</header>
+				
+			<h2 class="word"><% if (word) { %> <%= word %> <% } %></h2>
 
-		<h2 class="word"><% if (word) { %> <%= word %> <% } %></h2>
+			<div class="btns">
+				<button class="guess" id="latin">Latin</button>
+				<button class="guess" id="germanic">Germanic</button>
+			</div>
 
-		<button class="guess" id="latin">LATIN
-		</button>
+			<div class="progress">
+				<div class="progress-bar">
+					<div class="chip p1 current"></div>
+					<div class="chip p2"></div>
+					<div class="chip p3"></div>
+					<div class="chip p4"></div>
+					<div class="chip p5"></div>
+					<div class="chip p6"></div>
+					<div class="chip p7"></div>
+					<div class="chip p8"></div>
+					<div class="chip p9"></div>
+					<div class="chip p10"></div>
+				</div>
+				<div class="score"><span class="count">0</span>/10</div>
+			</div>
 
-		<button class="guess" id="germanic">GERMANIC
-		</button>
+			<h3 class="end-msg success-msg">Success!</h3>
+			<h3 class="end-msg fail-msg">WRONG!</h3>
 
-		<h3 class="end-msg success-msg">Success!</h3>
-		<h3 class="end-msg fail-msg">WRONG!</h3>
+			<% if (etymology) { %> <p class="etymology"><%= etymology %></p> <% } %></p>
 
-		<% if (etymology) { %> <p class="etymology"><%= etymology %></p> <% } %></p>
-
-		<button id="new_game">New game</button>
-
+			<button id="new_game">New game</button>
+		</main>
 		<script type="text/javascript" src="scripts/main.js"></script>
 	</body>
 </html>
