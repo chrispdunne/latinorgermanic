@@ -1,4 +1,3 @@
-console.log('loaded');
 const guessButtons = document.querySelectorAll('button.guess');
 const newButton = document.querySelector('#new_game');
 const wordTitle = document.querySelector('.word');
@@ -42,7 +41,6 @@ const newGame = async () => {
 	if (word?.etymology) {
 		ety.innerHTML = word.etymology;
 	}
-	console.log({ word });
 };
 
 const endGame = (guess, success) => {
@@ -83,7 +81,7 @@ const guess = async e => {
 		body: JSON.stringify({ guess, guessCount })
 	});
 	const answer = await res.json();
-	console.log({ answer });
+
 	if (answer.correct) {
 		endGame(answer.guess, true);
 	} else {

@@ -16,6 +16,29 @@ app.use(express.json());
 
 const { JSDOM } = jsdom;
 
+function shuffle(array) {
+	var j, x, i;
+	for (i = array.length - 1; i > 0; i--) {
+		j = Math.floor(Math.random() * (i + 1));
+		x = array[i];
+		array[i] = array[j];
+		array[j] = x;
+	}
+	return array;
+}
+
+function matchLanguage(etymology, language) {
+	const ety = String(etymology).toLowerCase();
+	if (language === 'germanic') {
+		return (
+			ety.includes(language) ||
+			ety.includes('old english') ||
+			ety.includes('middle english')
+		);
+	}
+	return ety.includes(language);
+}
+
 const getRandomWord = async () => {
 	const randomWord = await fetch(
 		'https://random-word-api.herokuapp.com/word'
@@ -31,18 +54,28 @@ const getRandomWord = async () => {
 		'[class^="word__defination"]'
 	)?.textContent;
 
-	const latin = String(etymology).toLowerCase().includes('latin');
-	const germanic = String(etymology).toLowerCase().includes('germanic');
+	const latin = matchLanguage(etymology, 'latin');
+	const germanic = matchLanguage(etymology, 'germanic');
 
 	return { word, etymology, latin, germanic };
 };
-const handleGetRandomWord = async () => {
+
+const handleGetRandomWord = async language => {
 	let random;
 	// @TODO consider not returning words without latin or germanic keywords
 	do {
 		random = await getRandomWord();
-	} while (!random.etymology || (!random.latin && !random.germanic));
+	} while (!random.etymology || !matchLanguage(random.etymology, language));
 	return random;
+};
+
+const getXRandomWords = async (language, x) => {
+	let words = [];
+	for (let i = 0; i < x; i++) {
+		const word = await handleGetRandomWord(language);
+		words.push(word);
+	}
+	return words;
 };
 
 const get10RandomWords = async () => {
@@ -60,11 +93,10 @@ const get10RandomWords = async () => {
 	}
 
 	// otherwise reset expiry, get new words and save to db
+	const latinWords = await getXRandomWords('latin', 6);
+	const germanicWords = await getXRandomWords('germanic', 4);
+	words = shuffle([...latinWords, ...germanicWords]);
 
-	for (let i = 0; i < 10; i++) {
-		const word = await handleGetRandomWord();
-		words.push(word);
-	}
 	db.set('words', JSON.stringify(words));
 	db.set('expiry', Date.now() + 1000 * 60 * 60 * 24); // 24 hours
 	return words;
